@@ -107,6 +107,15 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
     	return days[georgianTime.day_of_week - 1];
     }
     
+    function getDayOfWeekNumber(georgianTime){
+    	if(georgianTime.day_of_week == 1){
+    		return 7;
+    	}
+    	else{
+    		return georgianTime.day_of_week - 1;
+    	}
+    }
+    
     var weekNumber = 1;
     var weekNumberUpdatedOnDay = -1;
     const secondsInDay = 86400;
@@ -133,8 +142,14 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
 		
 		var secondsSinceStartOfYear = now.value() - firstDayOfYear.value();
 		System.println(secondsSinceStartOfYear);
-		var daysSinceStartOfYear = secondsSoFarInYear / secondsInDay;
+		var daysSinceStartOfYear = secondsSinceStartOfYear / secondsInDay;
 		System.println(daysSinceStartOfYear);
+		var todaysDayNumber = daysSinceStartOfYear + 1;
+		System.println(todaysDayNumber);
+		var dayOfWeek = getDayOfWeekNumber(georgianTime);
+		System.println(dayOfWeek);
+		var weekNumber = (todaysDayNumber - dayOfWeek + 10) / 7;
+		System.println(weekNumber);
 		// secondsInDay
 //    	System.println(Time.now().value().format("%w"));  Time now in unix time
     }
