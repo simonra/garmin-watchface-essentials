@@ -24,59 +24,59 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
 
     // Update the view
     function onUpdate(dc) {
-    	var now = Time.now();
-    	var numericTime = Gregorian.info(now, Time.FORMAT_SHORT);
-    	var descriptiveTime = Gregorian.info(now, Time.FORMAT_LONG);
+        var now = Time.now();
+        var numericTime = Gregorian.info(now, Time.FORMAT_SHORT);
+        var descriptiveTime = Gregorian.info(now, Time.FORMAT_LONG);
         // Get and show the current time
 //        var clockTime = System.getClockTime();
         var timeString = Lang.format(
-        	"$1$:$2$",
-        	[
-        		numericTime.hour,
-        		numericTime.min.format("%02d")
-        	]
+            "$1$:$2$",
+            [
+                numericTime.hour,
+                numericTime.min.format("%02d")
+            ]
         );
         var timeView = View.findDrawableById("TimeLabel");
         timeView.setText(timeString);
-        
+
         /*
         //WeekNumberLabel
         var weekNumberView = View.findDrawableById("WeekNumberLabel");
         weekNumberView.setText("W-01");
-        
+
         // BateryLabel
         var batteryView = View.findDrawableById("WeekNumberLabel");
         batteryView.setText("100%");
         */
-        
+
         //WeekAndBateryLabel
         var spacing = "        ";
-		var weekNumberText = "W" + getIsoWeek(now, numericTime).format("%02d");
-		
-		var repportedBatteryLevel = System
-			.getSystemStats()
-			.battery
-			.format( "%02d" ) ;
+        var weekNumberText = "W" + getIsoWeek(now, numericTime).format("%02d");
+
+        var repportedBatteryLevel = System
+            .getSystemStats()
+            .battery
+            .format( "%02d" ) ;
         var batteryPercentage = repportedBatteryLevel + "%";
-        
+
         var weekAndBatteryView = View.findDrawableById("WeekAndBateryLabel");
         weekAndBatteryView.setText(weekNumberText + spacing + batteryPercentage);
-        
+
         //DayLabel
         var dayView = View.findDrawableById("DayLabel");
         dayView.setText(getDayOfWeekLong(numericTime));
-        
+
         //DateLabel
         var dateView = View.findDrawableById("DateLabel");
         var dateText = Lang.format(
-        	"$1$-$2$-$3$",
-        	[
-        		numericTime.year,
-        		numericTime.month.format("%02d"),
-        		numericTime.day.format("%02d")
-    		]
-    	);
-    	dateView.setText(dateText);
+            "$1$-$2$-$3$",
+            [
+                numericTime.year,
+                numericTime.month.format("%02d"),
+                numericTime.day.format("%02d")
+            ]
+        );
+        dateView.setText(dateText);
 
         // Call the parent onUpdate function to redraw the layout
         View.onUpdate(dc);
@@ -95,85 +95,85 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
     // Terminate any active timers and prepare for slow updates.
     function onEnterSleep() {
     }
-    
+
     const days = [
-    	"Sunday", // So wrong to say that a week starts in the middle of the week-end, but for moronic design decision reasons it's like this now
-    	"Monday",
-		"Tuesday",
-		"Wednesday",
-		"Thursday",
-		"Friday",
-		"Saturday"
-	];
+        "Sunday", // So wrong to say that a week starts in the middle of the week-end, but for moronic design decision reasons it's like this now
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+    ];
     function getDayOfWeekLong(georgianTime){
-		// Did you know we 1-index everything, but arrays are still 0-indexed?
-    	return days[georgianTime.day_of_week - 1];
+        // Did you know we 1-index everything, but arrays are still 0-indexed?
+        return days[georgianTime.day_of_week - 1];
     }
-    
+
     function getDayOfWeekNumber(georgianTime){
-    	if(georgianTime.day_of_week == 1){
-    		return 7;
-    	}
-    	else{
-    		return georgianTime.day_of_week - 1;
-    	}
+        if(georgianTime.day_of_week == 1){
+            return 7;
+        }
+        else{
+            return georgianTime.day_of_week - 1;
+        }
     }
-    
+
 //    function get
-    
+
     var weekNumber = 1;
     var weekNumberUpdatedOnDay = -1;
     const secondsInDay = 86400;
     const secondsInHour = 3600;
     function getIsoWeek(now, georgianTime){
-    	if(weekNumberUpdatedOnDay != georgianTime.day_of_week){ // Only check for week number changes once per day
-    		if(weekNumberUpdatedOnDay != -1 && georgianTime.day_of_week != 2){
-    			// No need to updae if we have obtained a value and today is not a monday (week number only changes on mondays)
-    			return weekNumber;
-    		}
-    		weekNumberUpdatedOnDay = georgianTime.day_of_week;
-    	
-	    	System.println(Time.now().value()); // Time now in unix time
-	    	
-	    	var utcOffsetInSeconds = System.getClockTime().timeZoneOffset;
-	    	var utcOffsetInHours = utcOffsetInSeconds / secondsInHour;
-	    	
-	    	var optionsForFirstDayOfYear = {
-			    :year   => georgianTime.year,
-			    :month  => 1,
-			    :day    => 1,
-			    :hour   => utcOffsetInHours
-			};
-			var firstDayOfYear = Gregorian.moment(optionsForFirstDayOfYear);
-			System.println(firstDayOfYear.value());
-			var firstDayOfYearTimestamp = firstDayOfYear.value();
-			
-			var secondsSinceStartOfYear = now.value() - firstDayOfYear.value();
-			System.println(secondsSinceStartOfYear);
-			var daysSinceStartOfYear = secondsSinceStartOfYear / secondsInDay;
-			System.println(daysSinceStartOfYear);
-			var todaysDayNumber = daysSinceStartOfYear + 1;
-			System.println(todaysDayNumber);
-			var dayOfWeek = getDayOfWeekNumber(georgianTime);
-			System.println(dayOfWeek);
-			weekNumber = (todaysDayNumber - dayOfWeek + 10) / 7;
-			System.println(weekNumber);
-			
-			// Handle end/beginning of year special cases:
-			if(weekNumber < 1 || weekNumber == 53){
-				// determin whether week should be 53
-				// ToDo
-				if(georgianTime.month == 12){
-					if(georgianTime.day < 28){
-						// we are in the not 
-					}
-				}
-				
-				// otherwise in these cases it's the first week:
-				weekNumber = 1;
-				
-			}
-		}
-		return weekNumber;
+        if(weekNumberUpdatedOnDay != georgianTime.day_of_week){ // Only check for week number changes once per day
+            if(weekNumberUpdatedOnDay != -1 && georgianTime.day_of_week != 2){
+                // No need to updae if we have obtained a value and today is not a monday (week number only changes on mondays)
+                return weekNumber;
+            }
+            weekNumberUpdatedOnDay = georgianTime.day_of_week;
+
+            System.println(Time.now().value()); // Time now in unix time
+
+            var utcOffsetInSeconds = System.getClockTime().timeZoneOffset;
+            var utcOffsetInHours = utcOffsetInSeconds / secondsInHour;
+
+            var optionsForFirstDayOfYear = {
+                :year   => georgianTime.year,
+                :month  => 1,
+                :day    => 1,
+                :hour   => utcOffsetInHours
+            };
+            var firstDayOfYear = Gregorian.moment(optionsForFirstDayOfYear);
+            System.println(firstDayOfYear.value());
+            var firstDayOfYearTimestamp = firstDayOfYear.value();
+
+            var secondsSinceStartOfYear = now.value() - firstDayOfYear.value();
+            System.println(secondsSinceStartOfYear);
+            var daysSinceStartOfYear = secondsSinceStartOfYear / secondsInDay;
+            System.println(daysSinceStartOfYear);
+            var todaysDayNumber = daysSinceStartOfYear + 1;
+            System.println(todaysDayNumber);
+            var dayOfWeek = getDayOfWeekNumber(georgianTime);
+            System.println(dayOfWeek);
+            weekNumber = (todaysDayNumber - dayOfWeek + 10) / 7;
+            System.println(weekNumber);
+
+            // Handle end/beginning of year special cases:
+            if(weekNumber < 1 || weekNumber == 53){
+                // determin whether week should be 53
+                // ToDo
+                if(georgianTime.month == 12){
+                    if(georgianTime.day < 28){
+                        // we are in the not
+                    }
+                }
+
+                // otherwise in these cases it's the first week:
+                weekNumber = 1;
+
+            }
+        }
+        return weekNumber;
     }
 }
