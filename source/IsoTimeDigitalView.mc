@@ -58,7 +58,8 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
         
         //DayLabel
         var dayView = View.findDrawableById("DayLabel");
-        dayView.setText("Monday");
+        dayView.setText(getDayOfWeekLong(numericTime));
+//        dayView.setText("Monday");
         
         //DateLabel
         var dateView = View.findDrawableById("DateLabel");
@@ -88,6 +89,21 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
 
     // Terminate any active timers and prepare for slow updates.
     function onEnterSleep() {
+    }
+    
+    const days = [
+    	"Sunday", // So wrong to say that a week starts in the middle of the week-end, but for moronic design decision reasons it's like this now
+    	"Monday",
+		"Tuesday",
+		"Wednesday",
+		"Thursday",
+		"Friday",
+		"Saturday"
+	];
+    function getDayOfWeekLong(georgianTime){
+//    	System.println(georgianTime.day_of_week);
+		// Did you know we 1-index everything, but arrays are still 0-indexed?
+    	return days[georgianTime.day_of_week - 1];
     }
 
 }
