@@ -2,6 +2,8 @@ using Toybox.WatchUi;
 using Toybox.Graphics;
 using Toybox.System;
 using Toybox.Lang;
+using Toybox.Time;
+using Toybox.Time.Gregorian;
 
 class IsoTimeDigitalView extends WatchUi.WatchFace {
 
@@ -51,7 +53,35 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
         
         //DateLabel
         var dateView = View.findDrawableById("DateLabel");
-        dateView.setText("2018-08-31");
+        var today = Gregorian.info(Time.now(), Time.FORMAT_SHORT);
+        var dateText = Lang.format(
+        	"$1$-$2$-$3$",
+        	[
+        		today.year,
+        		today.month,
+        		today.day
+    		]
+    	);
+    	dateView.setText(dateText);
+
+//    	dateView.setText("2018-08-31");
+//        dateView.setText("" + clockTime.year + "-" + clockTime.month + "-" + clockTime.day);
+
+//		var today = Gregorian.info(Time.now(), Time.FORMAT_MEDIUM);
+//		var dateString = Lang.format(
+//		    "$1$:$2$:$3$ $4$ $5$ $6$ $7$",
+//		    [
+//		        today.hour,
+//		        today.min,
+//		        today.sec,
+//		        today.day_of_week,
+//		        today.day,
+//		        today.month,
+//		        today.year
+//		    ]
+//		);
+//		System.println(dateString); // e.g. "16:28:32 Wed 1 Mar 2017"
+//		dateView.setText(dateString);
 
         // Call the parent onUpdate function to redraw the layout
         View.onUpdate(dc);

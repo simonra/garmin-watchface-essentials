@@ -16,7 +16,7 @@
 	<label
     	id="WeekAndBateryLabel"
     	x="center"
-		y="25"
+		y="20"
 		font="Graphics.FONT_LARGE"
 		justification="Graphics.TEXT_JUSTIFY_CENTER"
 		color="Graphics.COLOR_BLUE" />
@@ -37,8 +37,8 @@
 	<label
     	id="DateLabel"
     	x="center"
-		y="190"
-		font="Graphics.FONT_LARGE"
+		y="170"
+		font="Graphics.FONT_NUMBER_MILD"
 		justification="Graphics.TEXT_JUSTIFY_CENTER"
 		color="Graphics.COLOR_BLUE" />
 </layout>
