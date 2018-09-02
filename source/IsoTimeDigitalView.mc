@@ -51,18 +51,20 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
         
         //WeekAndBateryLabel
         var spacing = "        ";
-//        var weekNumberText = "W52";
-//		getIsoWeek(now, numericTime);
-//        var weekNumberText = "W" + Lang.format("%1%", [now.format("%W")]);
 		var weekNumberText = "W" + getIsoWeek(now, numericTime).format("%02d");
-        var batteryPercentage = "100%";
+		
+		var repportedBatteryLevel = System
+			.getSystemStats()
+			.battery
+			.format( "%02d" ) ;
+        var batteryPercentage = repportedBatteryLevel + "%";
+        
         var weekAndBatteryView = View.findDrawableById("WeekAndBateryLabel");
         weekAndBatteryView.setText(weekNumberText + spacing + batteryPercentage);
         
         //DayLabel
         var dayView = View.findDrawableById("DayLabel");
         dayView.setText(getDayOfWeekLong(numericTime));
-//        dayView.setText("Monday");
         
         //DateLabel
         var dateView = View.findDrawableById("DateLabel");
@@ -124,8 +126,11 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
     const secondsInDay = 86400;
     const secondsInHour = 3600;
     function getIsoWeek(now, georgianTime){
-    	if(weekNumberUpdatedOnDay != georgianTime.day_of_week){
-    		// ToDo: update week number here
+    	if(weekNumberUpdatedOnDay != georgianTime.day_of_week){ // Only check for week number changes once per day
+    		if(weekNumberUpdatedOnDay != -1 && georgianTime.day_of_week != 2){
+    			// No need to updae if we have obtained a value and today is not a monday (week number only changes on mondays)
+    			return weekNumber;
+    		}
     		weekNumberUpdatedOnDay = georgianTime.day_of_week;
     	
 	    	System.println(Time.now().value()); // Time now in unix time
@@ -157,6 +162,12 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
 			// Handle end/beginning of year special cases:
 			if(weekNumber < 1 || weekNumber == 53){
 				// determin whether week should be 53
+				// ToDo
+				if(georgianTime.month == 12){
+					if(georgianTime.day < 28){
+						// we are in the not 
+					}
+				}
 				
 				// otherwise in these cases it's the first week:
 				weekNumber = 1;
