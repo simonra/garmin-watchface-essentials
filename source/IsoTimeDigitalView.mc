@@ -51,12 +51,13 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
         
         //WeekAndBateryLabel
         var spacing = "        ";
-        var weekNumber = "W52";
-		getIsoWeek(now, numericTime);
-//        var weekNumber = "W" + Lang.format("%1%", [now.format("%W")]);
+//        var weekNumberText = "W52";
+//		getIsoWeek(now, numericTime);
+//        var weekNumberText = "W" + Lang.format("%1%", [now.format("%W")]);
+		var weekNumberText = "W" + getIsoWeek(now, numericTime).format("%02d");
         var batteryPercentage = "100%";
         var weekAndBatteryView = View.findDrawableById("WeekAndBateryLabel");
-        weekAndBatteryView.setText(weekNumber + spacing + batteryPercentage);
+        weekAndBatteryView.setText(weekNumberText + spacing + batteryPercentage);
         
         //DayLabel
         var dayView = View.findDrawableById("DayLabel");
@@ -116,6 +117,8 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
     	}
     }
     
+//    function get
+    
     var weekNumber = 1;
     var weekNumberUpdatedOnDay = -1;
     const secondsInDay = 86400;
@@ -124,33 +127,42 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
     	if(weekNumberUpdatedOnDay != georgianTime.day_of_week){
     		// ToDo: update week number here
     		weekNumberUpdatedOnDay = georgianTime.day_of_week;
-    	}
-    	System.println(Time.now().value()); // Time now in unix time
     	
-    	var utcOffsetInSeconds = System.getClockTime().timeZoneOffset;
-    	var utcOffsetInHours = utcOffsetInSeconds / secondsInHour;
-    	
-    	var optionsForFirstDayOfYear = {
-		    :year   => georgianTime.year,
-		    :month  => 1,
-		    :day    => 1,
-		    :hour   => utcOffsetInHours
-		};
-		var firstDayOfYear = Gregorian.moment(optionsForFirstDayOfYear);
-		System.println(firstDayOfYear.value());
-		var firstDayOfYearTimestamp = firstDayOfYear.value();
-		
-		var secondsSinceStartOfYear = now.value() - firstDayOfYear.value();
-		System.println(secondsSinceStartOfYear);
-		var daysSinceStartOfYear = secondsSinceStartOfYear / secondsInDay;
-		System.println(daysSinceStartOfYear);
-		var todaysDayNumber = daysSinceStartOfYear + 1;
-		System.println(todaysDayNumber);
-		var dayOfWeek = getDayOfWeekNumber(georgianTime);
-		System.println(dayOfWeek);
-		var weekNumber = (todaysDayNumber - dayOfWeek + 10) / 7;
-		System.println(weekNumber);
-		// secondsInDay
-//    	System.println(Time.now().value().format("%w"));  Time now in unix time
+	    	System.println(Time.now().value()); // Time now in unix time
+	    	
+	    	var utcOffsetInSeconds = System.getClockTime().timeZoneOffset;
+	    	var utcOffsetInHours = utcOffsetInSeconds / secondsInHour;
+	    	
+	    	var optionsForFirstDayOfYear = {
+			    :year   => georgianTime.year,
+			    :month  => 1,
+			    :day    => 1,
+			    :hour   => utcOffsetInHours
+			};
+			var firstDayOfYear = Gregorian.moment(optionsForFirstDayOfYear);
+			System.println(firstDayOfYear.value());
+			var firstDayOfYearTimestamp = firstDayOfYear.value();
+			
+			var secondsSinceStartOfYear = now.value() - firstDayOfYear.value();
+			System.println(secondsSinceStartOfYear);
+			var daysSinceStartOfYear = secondsSinceStartOfYear / secondsInDay;
+			System.println(daysSinceStartOfYear);
+			var todaysDayNumber = daysSinceStartOfYear + 1;
+			System.println(todaysDayNumber);
+			var dayOfWeek = getDayOfWeekNumber(georgianTime);
+			System.println(dayOfWeek);
+			weekNumber = (todaysDayNumber - dayOfWeek + 10) / 7;
+			System.println(weekNumber);
+			
+			// Handle end/beginning of year special cases:
+			if(weekNumber < 1 || weekNumber == 53){
+				// determin whether week should be 53
+				
+				// otherwise in these cases it's the first week:
+				weekNumber = 1;
+				
+			}
+		}
+		return weekNumber;
     }
 }
