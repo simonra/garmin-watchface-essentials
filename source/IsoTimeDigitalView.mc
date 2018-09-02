@@ -52,6 +52,8 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
         //WeekAndBateryLabel
         var spacing = "        ";
         var weekNumber = "W52";
+		getIsoWeek(now, numericTime);
+//        var weekNumber = "W" + Lang.format("%1%", [now.format("%W")]);
         var batteryPercentage = "100%";
         var weekAndBatteryView = View.findDrawableById("WeekAndBateryLabel");
         weekAndBatteryView.setText(weekNumber + spacing + batteryPercentage);
@@ -101,9 +103,39 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
 		"Saturday"
 	];
     function getDayOfWeekLong(georgianTime){
-//    	System.println(georgianTime.day_of_week);
 		// Did you know we 1-index everything, but arrays are still 0-indexed?
     	return days[georgianTime.day_of_week - 1];
     }
-
+    
+    var weekNumber = 1;
+    var weekNumberUpdatedOnDay = -1;
+    const secondsInDay = 86400;
+    const secondsInHour = 3600;
+    function getIsoWeek(now, georgianTime){
+    	if(weekNumberUpdatedOnDay != georgianTime.day_of_week){
+    		// ToDo: update week number here
+    		weekNumberUpdatedOnDay = georgianTime.day_of_week;
+    	}
+    	System.println(Time.now().value()); // Time now in unix time
+    	
+    	var utcOffsetInSeconds = System.getClockTime().timeZoneOffset;
+    	var utcOffsetInHours = utcOffsetInSeconds / secondsInHour;
+    	
+    	var optionsForFirstDayOfYear = {
+		    :year   => georgianTime.year,
+		    :month  => 1,
+		    :day    => 1,
+		    :hour   => utcOffsetInHours
+		};
+		var firstDayOfYear = Gregorian.moment(optionsForFirstDayOfYear);
+		System.println(firstDayOfYear.value());
+		var firstDayOfYearTimestamp = firstDayOfYear.value();
+		
+		var secondsSinceStartOfYear = now.value() - firstDayOfYear.value();
+		System.println(secondsSinceStartOfYear);
+		var daysSinceStartOfYear = secondsSoFarInYear / secondsInDay;
+		System.println(daysSinceStartOfYear);
+		// secondsInDay
+//    	System.println(Time.now().value().format("%w"));  Time now in unix time
+    }
 }
