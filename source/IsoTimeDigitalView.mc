@@ -134,6 +134,10 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
             weekNumberUpdatedOnDay = georgianTime.day_of_week;
 
             System.println(Time.now().value()); // Time now in unix time
+            // System.println("testing some modolo stuff:");
+            // System.println(5 % 3);
+            // System.println(5 % 5);
+            // System.println(3 % 5);
 
             var utcOffsetInSeconds = System.getClockTime().timeZoneOffset;
             var utcOffsetInHours = utcOffsetInSeconds / secondsInHour;
@@ -160,20 +164,69 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
             System.println(weekNumber);
 
             // Handle end/beginning of year special cases:
-            if(weekNumber < 1 || weekNumber == 53){
-                // determin whether week should be 53
-                // ToDo
-                if(georgianTime.month == 12){
-                    if(georgianTime.day < 28){
-                        // we are in the not
-                    }
+            if(weekNumber < 1){
+                // We are in the last week of the previous year
+                if(yearHasWeek53(georgianTime.year -1, utcOffsetInHours)){
+                    weekNumber = 53;
                 }
-
-                // otherwise in these cases it's the first week:
-                weekNumber = 1;
-
+                else{
+                    weekNumber = 52;
+                }
+            }
+            else if(weekNumber == 53){
+                // We might be in the first week of the next year, have to check:
+                if (!yearHasWeek53(georgianTime.year, utcOffsetInHours)) {
+                    weekNumber = 1;
+                }
             }
         }
         return weekNumber;
+    }
+
+    function yearHasWeek53 (year, utcOffset) {
+        var december31 = Gregorian.moment(
+            {
+                :year   => year,
+                :month  => 12,
+                :day    => 31,
+                :hour   => utcOffset
+            }
+        );
+        var december31Day = getDayOfWeekNumber(december31);
+        if(december31Day < 4){
+            // December 31 falls on monday, tuesday or wednesday, therefore all days in "week 53" are in week 1 of the following year
+            return false;
+        }
+        else if(december31Day == 4){
+            // December 31 falls on thursday, therefor we have a week 53
+            return true;
+        }
+        else if(december31Day == 5){
+            // December 31 falls on friday, making it week 52 unless we're in a leap year, making it in week 53
+            if( isLeapYear( year )){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else{
+            // december31Day > 5
+            // December 31 is in week 52 of the ending year:
+            return false;
+        }
+    }
+
+    function isLeapYear (year) {
+        if(year % 4 != 0){
+            return false;
+        }
+        if(year % 100 != 0){
+            return true;
+        }
+        if(year % 400 != 0){
+            return false;
+        }
+        return true;
     }
 }
