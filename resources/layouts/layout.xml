@@ -30,8 +30,8 @@
     <label
     	id="TimeLabel"
     	x="center"
-		y="120"
-		font="Graphics.FONT_LARGE"
+		y="80"
+		font="Graphics.FONT_NUMBER_THAI_HOT"
 		justification="Graphics.TEXT_JUSTIFY_CENTER"
 		color="Graphics.COLOR_BLUE" />
 	<label
