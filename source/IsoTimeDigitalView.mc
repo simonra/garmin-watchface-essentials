@@ -28,8 +28,14 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
     	var numericTime = Gregorian.info(now, Time.FORMAT_SHORT);
     	var descriptiveTime = Gregorian.info(now, Time.FORMAT_LONG);
         // Get and show the current time
-        var clockTime = System.getClockTime();
-        var timeString = Lang.format("$1$:$2$", [clockTime.hour, clockTime.min.format("%02d")]);
+//        var clockTime = System.getClockTime();
+        var timeString = Lang.format(
+        	"$1$:$2$",
+        	[
+        		numericTime.hour,
+        		numericTime.min.format("%02d")
+        	]
+        );
         var timeView = View.findDrawableById("TimeLabel");
         timeView.setText(timeString);
         
@@ -44,7 +50,7 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
         */
         
         //WeekAndBateryLabel
-        var spacing = "         ";
+        var spacing = "        ";
         var weekNumber = "W52";
         var batteryPercentage = "100%";
         var weekAndBatteryView = View.findDrawableById("WeekAndBateryLabel");
