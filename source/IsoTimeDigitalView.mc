@@ -39,13 +39,25 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
         var timeView = View.findDrawableById("TimeLabel");
         timeView.setText(timeString);
 
+        //DateLabel
+        var dateView = View.findDrawableById("DateLabel");
+        var dateText = Lang.format(
+            "$1$-$2$-$3$",
+            [
+                now.year,
+                now.month.format("%02d"),
+                now.day.format("%02d")
+            ]
+        );
+        dateView.setText(dateText);
+
         //WeekLabel
-        var calculatedWeekNumber = getIsoWeek(now);
+        var calculatedWeekNumber = getIsoWeek(now, dateText);
         var weekNumberText = "Wk" + calculatedWeekNumber.format("%02d");
         var weekView = View.findDrawableById("WeekLabel");
         weekView.setText(weekNumberText);
 
-		// BatteryLabel
+        // BatteryLabel
         var repportedBatteryLevel = System
             .getSystemStats()
             .battery
@@ -58,18 +70,6 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
         //DayLabel
         var dayView = View.findDrawableById("DayLabel");
         dayView.setText(getDayOfWeekLong(now));
-
-        //DateLabel
-        var dateView = View.findDrawableById("DateLabel");
-        var dateText = Lang.format(
-            "$1$-$2$-$3$",
-            [
-                now.year,
-                now.month.format("%02d"),
-                now.day.format("%02d")
-            ]
-        );
-        dateView.setText(dateText);
 
         // Call the parent onUpdate function to redraw the layout
         View.onUpdate(dc);
@@ -121,15 +121,15 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
     }
 
     var weekNumber = 1;
-    var weekNumberUpdatedOnDay = -1;
+    var weekNumberUpdatedOnDay = "";
     // Returns the ISO week for a given point in time.
-    function getIsoWeek(timestamp_gregorian_short){
-        if(weekNumberUpdatedOnDay != timestamp_gregorian_short.day_of_week){ // Only check for week number changes once per day
-            if(weekNumberUpdatedOnDay != -1 && timestamp_gregorian_short.day_of_week != 2){
+    function getIsoWeek(timestamp_gregorian_short, dateAsText){
+        if(weekNumberUpdatedOnDay != dateAsText){ // Only check for week number changes once per day
+            if(weekNumberUpdatedOnDay != "" && timestamp_gregorian_short.day_of_week != 2){
                 // No need to updae if we have obtained a value and today is not a monday (week number only changes on mondays)
                 return weekNumber;
             }
-            weekNumberUpdatedOnDay = timestamp_gregorian_short.day_of_week;
+            weekNumberUpdatedOnDay = dateAsText;
 
             var todaysDayNumber = getOrdinalDate(timestamp_gregorian_short);
 
