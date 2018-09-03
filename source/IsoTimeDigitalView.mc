@@ -50,15 +50,17 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
         */
 
         //WeekAndBateryLabel
-        var spacing = "        ";
-        var weekNumberText = "W" + getIsoWeek(now, numericTime).format("%02d");
+        var timezoneOffset = System.getClockTime().timeZoneOffset;
+        var calculatedWeekNumber = getIsoWeek(now, numericTime, timezoneOffset);
+        var weekNumberText = "W" + calculatedWeekNumber.format("%02d");
 
         var repportedBatteryLevel = System
             .getSystemStats()
             .battery
-            .format( "%02d" ) ;
+            .format("%02d") ;
         var batteryPercentage = repportedBatteryLevel + "%";
 
+        var spacing = "        ";
         var weekAndBatteryView = View.findDrawableById("WeekAndBateryLabel");
         weekAndBatteryView.setText(weekNumberText + spacing + batteryPercentage);
 
@@ -119,54 +121,49 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
         }
     }
 
-//    function get
-
     var weekNumber = 1;
     var weekNumberUpdatedOnDay = -1;
     const secondsInDay = 86400;
     const secondsInHour = 3600;
-    function getIsoWeek(now, georgianTime){
-        if(weekNumberUpdatedOnDay != georgianTime.day_of_week){ // Only check for week number changes once per day
-            if(weekNumberUpdatedOnDay != -1 && georgianTime.day_of_week != 2){
+    // Returns the ISO week for a given point in time.
+    // Takes in both the raw time and the gregorian representation because in all my use cases the gregorian representation is already pre-calculated.
+    function getIsoWeek(timestamp_raw, timestamp_georgian_short, utcOffsetInSeconds){
+        if(weekNumberUpdatedOnDay != timestamp_georgian_short.day_of_week){ // Only check for week number changes once per day
+            if(weekNumberUpdatedOnDay != -1 && timestamp_georgian_short.day_of_week != 2){
                 // No need to updae if we have obtained a value and today is not a monday (week number only changes on mondays)
                 return weekNumber;
             }
-            weekNumberUpdatedOnDay = georgianTime.day_of_week;
+            weekNumberUpdatedOnDay = timestamp_georgian_short.day_of_week;
 
-            System.println(Time.now().value()); // Time now in unix time
-            // System.println("testing some modolo stuff:");
-            // System.println(5 % 3);
-            // System.println(5 % 5);
-            // System.println(3 % 5);
+            // System.println(Time.now().value()); // Time now in unix time
 
-            var utcOffsetInSeconds = System.getClockTime().timeZoneOffset;
             var utcOffsetInHours = utcOffsetInSeconds / secondsInHour;
 
             var optionsForFirstDayOfYear = {
-                :year   => georgianTime.year,
+                :year   => timestamp_georgian_short.year,
                 :month  => 1,
                 :day    => 1,
                 :hour   => utcOffsetInHours
             };
             var firstDayOfYear = Gregorian.moment(optionsForFirstDayOfYear);
-            System.println(firstDayOfYear.value());
+            // System.println(firstDayOfYear.value());
             var firstDayOfYearTimestamp = firstDayOfYear.value();
 
-            var secondsSinceStartOfYear = now.value() - firstDayOfYear.value();
-            System.println(secondsSinceStartOfYear);
+            var secondsSinceStartOfYear = timestamp_raw.value() - firstDayOfYear.value();
+            // System.println(secondsSinceStartOfYear);
             var daysSinceStartOfYear = secondsSinceStartOfYear / secondsInDay;
-            System.println(daysSinceStartOfYear);
+            // System.println(daysSinceStartOfYear);
             var todaysDayNumber = daysSinceStartOfYear + 1;
-            System.println(todaysDayNumber);
-            var dayOfWeek = getDayOfWeekNumber(georgianTime);
-            System.println(dayOfWeek);
+            // System.println(todaysDayNumber);
+            var dayOfWeek = getDayOfWeekNumber(timestamp_georgian_short);
+            // System.println(dayOfWeek);
             weekNumber = (todaysDayNumber - dayOfWeek + 10) / 7;
-            System.println(weekNumber);
+            // System.println(weekNumber);
 
             // Handle end/beginning of year special cases:
             if(weekNumber < 1){
                 // We are in the last week of the previous year
-                if(yearHasWeek53(georgianTime.year -1, utcOffsetInHours)){
+                if(yearHasWeek53(timestamp_georgian_short.year -1, utcOffsetInHours)){
                     weekNumber = 53;
                 }
                 else{
@@ -175,7 +172,7 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
             }
             else if(weekNumber == 53){
                 // We might be in the first week of the next year, have to check:
-                if (!yearHasWeek53(georgianTime.year, utcOffsetInHours)) {
+                if (!yearHasWeek53(timestamp_georgian_short.year, utcOffsetInHours)) {
                     weekNumber = 1;
                 }
             }
