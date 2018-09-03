@@ -124,17 +124,13 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
             }
             weekNumberUpdatedOnDay = timestamp_gregorian_short.day_of_week;
 
-            // System.println(Time.now().value()); // Time now in unix time
-
             var todaysDayNumber = getOrdinalDate(timestamp_gregorian_short);
-            // System.println(todaysDayNumber);
+
             var dayOfWeek = timestamp_gregorian_short.day_of_week - 1;
             if(dayOfWeek == 0){
                 dayOfWeek = 7;
             }
-            // System.println(dayOfWeek);
             weekNumber = (todaysDayNumber - dayOfWeek + 10) / 7;
-            // System.println(weekNumber);
 
             // Handle end/beginning of year special cases:
             if(weekNumber < 1){
