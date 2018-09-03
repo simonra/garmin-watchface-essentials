@@ -38,8 +38,7 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
         timeView.setText(timeString);
 
         //WeekAndBateryLabel
-        var timezoneOffset = System.getClockTime().timeZoneOffset;
-        var calculatedWeekNumber = getIsoWeek(now, numericTime, timezoneOffset);
+        var calculatedWeekNumber = getIsoWeek(now, numericTime);
         var weekNumberText = "W" + calculatedWeekNumber.format("%02d");
 
         var repportedBatteryLevel = System
@@ -100,21 +99,11 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
         return days[gregorianTime.day_of_week - 1];
     }
 
-    function getDayOfWeekNumber(gregorianTime){
-        if(gregorianTime.day_of_week == 1){
-            return 7;
-        }
-        else{
-            return gregorianTime.day_of_week - 1;
-        }
-    }
-
     var weekNumber = 1;
     var weekNumberUpdatedOnDay = -1;
-    const secondsInHour = 3600;
     // Returns the ISO week for a given point in time.
     // Takes in both the raw time and the gregorian representation because in all my use cases the gregorian representation is already pre-calculated.
-    function getIsoWeek(timestamp_raw, timestamp_gregorian_short, utcOffsetInSeconds){
+    function getIsoWeek(timestamp_raw, timestamp_gregorian_short){
         if(weekNumberUpdatedOnDay != timestamp_gregorian_short.day_of_week){ // Only check for week number changes once per day
             if(weekNumberUpdatedOnDay != -1 && timestamp_gregorian_short.day_of_week != 2){
                 // No need to updae if we have obtained a value and today is not a monday (week number only changes on mondays)
@@ -124,11 +113,12 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
 
             // System.println(Time.now().value()); // Time now in unix time
 
-            var utcOffsetInHours = utcOffsetInSeconds / secondsInHour;
-
-            var todaysDayNumber = getOrdinalDate(timestamp_raw, timestamp_gregorian_short, utcOffsetInHours);
+            var todaysDayNumber = getOrdinalDate(timestamp_gregorian_short);
             // System.println(todaysDayNumber);
-            var dayOfWeek = getDayOfWeekNumber(timestamp_gregorian_short);
+            var dayOfWeek = timestamp_gregorian_short.day_of_week - 1;
+            if(dayOfWeek == 0){
+                dayOfWeek = 7;
+            }
             // System.println(dayOfWeek);
             weekNumber = (todaysDayNumber - dayOfWeek + 10) / 7;
             // System.println(weekNumber);
@@ -148,24 +138,62 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
         return weekNumber;
     }
 
-    const secondsInDay = 86400;
-    // For a given date calculates how many preceding days there have been during a year.
-    function getOrdinalDate(timestamp_raw, timestamp_gregorian_short, utcOffsetInHours){
-        var optionsForFirstDayOfYear = {
-            :year   => timestamp_gregorian_short.year,
-            :month  => 1,
-            :day    => 1,
-            :hour   => utcOffsetInHours
-        };
-        var firstDayOfYear = Gregorian.moment(optionsForFirstDayOfYear);
-        // System.println(firstDayOfYear.value());
-        var firstDayOfYearTimestamp = firstDayOfYear.value();
-
-        var secondsSinceStartOfYear = timestamp_raw.value() - firstDayOfYear.value();
-        // System.println(secondsSinceStartOfYear);
-        var daysSinceStartOfYear = secondsSinceStartOfYear / secondsInDay;
-        // System.println(daysSinceStartOfYear);
-        return daysSinceStartOfYear + 1;
+    function getOrdinalDate (timestamp_gregorian_short) {
+        var calculatedOrdinalValue = timestamp_gregorian_short.day;
+        switch (timestamp_gregorian_short.month) {
+            case 1:
+                // No need to add anything if we're in january
+                break;
+            case 2:
+                // February
+                calculatedOrdinalValue += 31;
+                break;
+            case 3:
+                // March
+                calculatedOrdinalValue += 59;
+                break;
+            case 4:
+                // April
+                calculatedOrdinalValue += 90;
+                break;
+            case 5:
+                // May
+                calculatedOrdinalValue += 120;
+                break;
+            case 6:
+                // June
+                calculatedOrdinalValue += 151;
+                break;
+            case 7:
+                // July
+                calculatedOrdinalValue += 181;
+                break;
+            case 8:
+                // August
+                calculatedOrdinalValue += 212;
+                break;
+            case 9:
+                // September
+                calculatedOrdinalValue += 243;
+                break;
+            case 10:
+                // October
+                calculatedOrdinalValue += 273;
+                break;
+            case 11:
+                // November
+                calculatedOrdinalValue += 304;
+                break;
+            case 12:
+                // December
+                calculatedOrdinalValue += 334;
+            default:
+                break;
+        }
+        if(isLeapYear(timestamp_gregorian_short.year) && timestamp_gregorian_short.month > 2){
+            calculatedOrdinalValue += 1;
+        }
+        return calculatedOrdinalValue;
     }
 
     function numberOfWeeksInYear (year) {
@@ -177,9 +205,10 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
         return 52;
     }
     function p(year) {
+        // Note: This relies on monkey c's integer division discarding any remainder.
+        // All the divisions have to be floored.
         return (year + year/4 - year/100 + year/400) % 7;
     }
-
 
     function isLeapYear (year) {
         if(year % 4 != 0){
