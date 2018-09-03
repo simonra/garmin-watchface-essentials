@@ -43,29 +43,20 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
         var now = Gregorian.info(Time.now(), Time.FORMAT_SHORT);
 
         // TimeLabel
-        var timeString = "";
+        var hour = now.hour;
         if(not24Hour){
-            var hoursAltered = now.hour % 12;
-            if(hoursAltered == 0){
-                hoursAltered = 12;
+            hour = now.hour % 12;
+            if(hour == 0){
+                hour = 12;
             }
-            timeString = Lang.format(
-                "$1$:$2$",
-                [
-                    hoursAltered,
-                    now.min.format("%02d")
-                ]
-            );
         }
-        else {
-            timeString = Lang.format(
-                "$1$:$2$",
-                [
-                    now.hour,
-                    now.min.format("%02d")
-                ]
-            );
-        }
+        var timeString = Lang.format(
+            "$1$:$2$",
+            [
+                hour,
+                now.min.format("%02d")
+            ]
+        );
         var timeView = View.findDrawableById("TimeLabel");
         timeView.setText(timeString);
 
