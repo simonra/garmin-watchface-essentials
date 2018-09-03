@@ -84,18 +84,33 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
     function onEnterSleep() {
     }
 
-    const days = [
-        "Sunday", // So wrong to say that a week starts in the middle of the week-end, but for moronic design decision reasons it's like this now
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday"
-    ];
     function getDayOfWeekLong(gregorianTime){
-        // Did you know we 1-index everything, but arrays are still 0-indexed?
-        return days[gregorianTime.day_of_week - 1];
+        switch (gregorianTime.day_of_week) {
+            case 2:
+                return "Monday";
+                break;
+            case 3:
+                return "Tuesday";
+                break;
+            case 4:
+                return "Wednesday";
+                break;
+            case 5:
+                return "Thursday";
+                break;
+            case 6:
+                return "Friday";
+                break;
+            case 7:
+                return "Saturday";
+                break;
+            case 1:
+                return "Sunday";
+                break;
+            default:
+                return "NotADay";
+                break;
+        }
     }
 
     var weekNumber = 1;
