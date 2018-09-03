@@ -4,6 +4,7 @@ using Toybox.System;
 using Toybox.Lang;
 using Toybox.Time;
 using Toybox.Time.Gregorian;
+using Toybox.Application.Storage;
 
 class IsoTimeDigitalView extends WatchUi.WatchFace {
 
@@ -20,6 +21,8 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
     // the state of this View and prepare it to be shown. This includes
     // loading resources into memory.
     function onShow() {
+        weekNumber = Storage.getValue("weekNumber");
+        weekNumberUpdatedOnDay = Storage.getValue("weekNumberUpdatedOnDay");
     }
 
     // Update the view
@@ -74,6 +77,8 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
     // state of this View here. This includes freeing resources from
     // memory.
     function onHide() {
+        Storage.setValue("weekNumber", weekNumber);
+        Storage.setValue("weekNumberUpdatedOnDay", weekNumberUpdatedOnDay);
     }
 
     // The user has just looked at their watch. Timers and animations may be started here.
