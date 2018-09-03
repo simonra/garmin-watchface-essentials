@@ -41,7 +41,7 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
 
         //WeekAndBateryLabel
         var calculatedWeekNumber = getIsoWeek(now);
-        var weekNumberText = "W" + calculatedWeekNumber.format("%02d");
+        var weekNumberText = "Wk" + calculatedWeekNumber.format("%02d");
 
         var repportedBatteryLevel = System
             .getSystemStats()
@@ -49,7 +49,7 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
             .format("%02d") ;
         var batteryPercentage = repportedBatteryLevel + "%";
 
-        var spacing = "        ";
+        var spacing = "       ";
         var weekAndBatteryView = View.findDrawableById("WeekAndBateryLabel");
         weekAndBatteryView.setText(weekNumberText + spacing + batteryPercentage);
 
