@@ -25,6 +25,14 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
         weekNumberUpdatedOnDay = Storage.getValue("weekNumberUpdatedOnDay");
     }
 
+    // Called when this View is removed from the screen. Save the
+    // state of this View here. This includes freeing resources from
+    // memory.
+    function onHide() {
+        Storage.setValue("weekNumber", weekNumber);
+        Storage.setValue("weekNumberUpdatedOnDay", weekNumberUpdatedOnDay);
+    }
+
     // Update the view
     function onUpdate(dc) {
         var now = Gregorian.info(Time.now(), Time.FORMAT_SHORT);
@@ -73,14 +81,6 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
 
         // Call the parent onUpdate function to redraw the layout
         View.onUpdate(dc);
-    }
-
-    // Called when this View is removed from the screen. Save the
-    // state of this View here. This includes freeing resources from
-    // memory.
-    function onHide() {
-        Storage.setValue("weekNumber", weekNumber);
-        Storage.setValue("weekNumberUpdatedOnDay", weekNumberUpdatedOnDay);
     }
 
     // The user has just looked at their watch. Timers and animations may be started here.
