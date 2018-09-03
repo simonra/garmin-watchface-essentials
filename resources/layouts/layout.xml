@@ -1,7 +1,14 @@
 <layout id="WatchFace">
 	<label
-		id="WeekAndBateryLabel"
-		x="center"
+		id="WeekLabel"
+		x="75"
+		y="20"
+		font="Graphics.FONT_LARGE"
+		justification="Graphics.TEXT_JUSTIFY_CENTER"
+		color="Graphics.COLOR_WHITE" />
+	<label
+		id="BatteryLabel"
+		x="175"
 		y="20"
 		font="Graphics.FONT_LARGE"
 		justification="Graphics.TEXT_JUSTIFY_CENTER"

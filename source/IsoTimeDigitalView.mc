@@ -39,19 +39,21 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
         var timeView = View.findDrawableById("TimeLabel");
         timeView.setText(timeString);
 
-        //WeekAndBateryLabel
+        //WeekLabel
         var calculatedWeekNumber = getIsoWeek(now);
         var weekNumberText = "Wk" + calculatedWeekNumber.format("%02d");
+        var weekView = View.findDrawableById("WeekLabel");
+        weekView.setText(weekNumberText);
 
+		// BatteryLabel
         var repportedBatteryLevel = System
             .getSystemStats()
             .battery
             .format("%02d") ;
         var batteryPercentage = repportedBatteryLevel + "%";
 
-        var spacing = "       ";
-        var weekAndBatteryView = View.findDrawableById("WeekAndBateryLabel");
-        weekAndBatteryView.setText(weekNumberText + spacing + batteryPercentage);
+        var batteryView = View.findDrawableById("BatteryLabel");
+        batteryView.setText(batteryPercentage);
 
         //DayLabel
         var dayView = View.findDrawableById("DayLabel");
