@@ -38,7 +38,7 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
         timeView.setText(timeString);
 
         //WeekAndBateryLabel
-        var calculatedWeekNumber = getIsoWeek(now, numericTime);
+        var calculatedWeekNumber = getIsoWeek(numericTime);
         var weekNumberText = "W" + calculatedWeekNumber.format("%02d");
 
         var repportedBatteryLevel = System
@@ -102,8 +102,7 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
     var weekNumber = 1;
     var weekNumberUpdatedOnDay = -1;
     // Returns the ISO week for a given point in time.
-    // Takes in both the raw time and the gregorian representation because in all my use cases the gregorian representation is already pre-calculated.
-    function getIsoWeek(timestamp_raw, timestamp_gregorian_short){
+    function getIsoWeek(timestamp_gregorian_short){
         if(weekNumberUpdatedOnDay != timestamp_gregorian_short.day_of_week){ // Only check for week number changes once per day
             if(weekNumberUpdatedOnDay != -1 && timestamp_gregorian_short.day_of_week != 2){
                 // No need to updae if we have obtained a value and today is not a monday (week number only changes on mondays)
