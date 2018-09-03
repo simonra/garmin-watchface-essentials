@@ -8,7 +8,7 @@
 		color="Graphics.COLOR_WHITE" />
 	<label
 		id="BatteryLabel"
-		x="175"
+		x="170"
 		y="20"
 		font="Graphics.FONT_LARGE"
 		justification="Graphics.TEXT_JUSTIFY_CENTER"
