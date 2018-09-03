@@ -9,8 +9,8 @@
 	<label
 		id="DayLabel"
 		x="center"
-		y="60"
-		font="Graphics.FONT_LARGE"
+		y="55"
+		font="Graphics.FONT_NUMBER_MILD"
 		justification="Graphics.TEXT_JUSTIFY_CENTER"
 		color="Graphics.COLOR_WHITE" />
 	<label
