@@ -1,14 +1,14 @@
 <layout id="WatchFace">
 	<label
 		id="WeekLabel"
-		x="80"
+		x="70"
 		y="20"
 		font="Graphics.FONT_LARGE"
 		justification="Graphics.TEXT_JUSTIFY_CENTER"
 		color="Graphics.COLOR_WHITE" />
 	<label
 		id="BatteryLabel"
-		x="175"
+		x="150"
 		y="20"
 		font="Graphics.FONT_LARGE"
 		justification="Graphics.TEXT_JUSTIFY_CENTER"
@@ -16,21 +16,21 @@
 	<label
 		id="DayLabel"
 		x="center"
-		y="55"
+		y="50"
 		font="Graphics.FONT_LARGE"
 		justification="Graphics.TEXT_JUSTIFY_CENTER"
 		color="Graphics.COLOR_WHITE" />
 	<label
 		id="TimeLabel"
 		x="center"
-		y="100"
-		font="Graphics.FONT_NUMBER_THAI_HOT"
+		y="80"
+		font="Graphics.FONT_NUMBER_MEDIUM"
 		justification="Graphics.TEXT_JUSTIFY_CENTER"
 		color="Graphics.COLOR_WHITE" />
 	<label
 		id="DateLabel"
 		x="center"
-		y="175"
+		y="130"
 		font="Graphics.FONT_NUMBER_MILD"
 		justification="Graphics.TEXT_JUSTIFY_CENTER"
 		color="Graphics.COLOR_WHITE" />

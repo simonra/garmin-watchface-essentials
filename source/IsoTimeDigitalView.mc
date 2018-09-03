@@ -10,6 +10,8 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
 
     function initialize() {
         WatchFace.initialize();
+//        Storage.setValue("weekNumber", weekNumber);
+//        Storage.setValue("weekNumberUpdatedOnDay", weekNumberUpdatedOnDay);
     }
 
     // Load your resources here
@@ -74,6 +76,7 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
 
         var batteryView = View.findDrawableById("BatteryLabel");
         batteryView.setText(batteryPercentage);
+//        batteryView.setText("100%");
 
         //DayLabel
         var dayView = View.findDrawableById("DayLabel");

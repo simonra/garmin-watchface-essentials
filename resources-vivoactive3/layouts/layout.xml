@@ -1,7 +1,7 @@
 <layout id="WatchFace">
 	<label
 		id="WeekLabel"
-		x="80"
+		x="75"
 		y="20"
 		font="Graphics.FONT_LARGE"
 		justification="Graphics.TEXT_JUSTIFY_CENTER"
@@ -23,14 +23,14 @@
 	<label
 		id="TimeLabel"
 		x="center"
-		y="100"
+		y="80"
 		font="Graphics.FONT_NUMBER_THAI_HOT"
 		justification="Graphics.TEXT_JUSTIFY_CENTER"
 		color="Graphics.COLOR_WHITE" />
 	<label
 		id="DateLabel"
 		x="center"
-		y="175"
+		y="170"
 		font="Graphics.FONT_NUMBER_MILD"
 		justification="Graphics.TEXT_JUSTIFY_CENTER"
 		color="Graphics.COLOR_WHITE" />
