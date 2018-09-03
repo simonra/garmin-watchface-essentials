@@ -10,7 +10,7 @@
 		id="DayLabel"
 		x="center"
 		y="55"
-		font="Graphics.FONT_NUMBER_MILD"
+		font="Graphics.FONT_LARGE"
 		justification="Graphics.TEXT_JUSTIFY_CENTER"
 		color="Graphics.COLOR_WHITE" />
 	<label
