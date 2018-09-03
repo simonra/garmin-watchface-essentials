@@ -10,6 +10,7 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
 
     function initialize() {
         WatchFace.initialize();
+        not24Hour = !System.getDeviceSettings().is24Hour;
 //        Storage.setValue("weekNumber", weekNumber);
 //        Storage.setValue("weekNumberUpdatedOnDay", weekNumberUpdatedOnDay);
     }
@@ -23,6 +24,7 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
     // the state of this View and prepare it to be shown. This includes
     // loading resources into memory.
     function onShow() {
+        not24Hour = !System.getDeviceSettings().is24Hour;
         weekNumber = Storage.getValue("weekNumber");
         weekNumberUpdatedOnDay = Storage.getValue("weekNumberUpdatedOnDay");
     }
@@ -35,17 +37,35 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
         Storage.setValue("weekNumberUpdatedOnDay", weekNumberUpdatedOnDay);
     }
 
+    var not24Hour = false;
     // Update the view
     function onUpdate(dc) {
         var now = Gregorian.info(Time.now(), Time.FORMAT_SHORT);
 
-        var timeString = Lang.format(
-            "$1$:$2$",
-            [
-                now.hour,
-                now.min.format("%02d")
-            ]
-        );
+        // TimeLabel
+        var timeString = "";
+        if(not24Hour){
+            var hoursAltered = now.hour % 12;
+            if(hoursAltered == 0){
+                hoursAltered = 12;
+            }
+            timeString = Lang.format(
+                "$1$:$2$",
+                [
+                    hoursAltered,
+                    now.min.format("%02d")
+                ]
+            );
+        }
+        else {
+            timeString = Lang.format(
+                "$1$:$2$",
+                [
+                    now.hour,
+                    now.min.format("%02d")
+                ]
+            );
+        }
         var timeView = View.findDrawableById("TimeLabel");
         timeView.setText(timeString);
 
