@@ -24,21 +24,20 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
 
     // Update the view
     function onUpdate(dc) {
-        var now = Time.now();
-        var numericTime = Gregorian.info(now, Time.FORMAT_SHORT);
+        var now = Gregorian.info(Time.now(), Time.FORMAT_SHORT);
 
         var timeString = Lang.format(
             "$1$:$2$",
             [
-                numericTime.hour,
-                numericTime.min.format("%02d")
+                now.hour,
+                now.min.format("%02d")
             ]
         );
         var timeView = View.findDrawableById("TimeLabel");
         timeView.setText(timeString);
 
         //WeekAndBateryLabel
-        var calculatedWeekNumber = getIsoWeek(numericTime);
+        var calculatedWeekNumber = getIsoWeek(now);
         var weekNumberText = "W" + calculatedWeekNumber.format("%02d");
 
         var repportedBatteryLevel = System
@@ -53,16 +52,16 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
 
         //DayLabel
         var dayView = View.findDrawableById("DayLabel");
-        dayView.setText(getDayOfWeekLong(numericTime));
+        dayView.setText(getDayOfWeekLong(now));
 
         //DateLabel
         var dateView = View.findDrawableById("DateLabel");
         var dateText = Lang.format(
             "$1$-$2$-$3$",
             [
-                numericTime.year,
-                numericTime.month.format("%02d"),
-                numericTime.day.format("%02d")
+                now.year,
+                now.month.format("%02d"),
+                now.day.format("%02d")
             ]
         );
         dateView.setText(dateText);
