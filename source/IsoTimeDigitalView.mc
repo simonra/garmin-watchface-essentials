@@ -136,36 +136,40 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
 
     var weekNumber = 1;
     var weekNumberUpdatedOnDay = "";
-    // Returns the ISO week for a given point in time.
-    function getIsoWeek(timestamp_gregorian_short, dateAsText){
+    function getIsoWeek (timestamp_gregorian_short, dateAsText) {
         if(weekNumberUpdatedOnDay != dateAsText){ // Only check for week number changes once per day
             if(weekNumberUpdatedOnDay != "" && timestamp_gregorian_short.day_of_week != 2){
                 // No need to updae if we have obtained a value and today is not a monday (week number only changes on mondays)
                 return weekNumber;
             }
             weekNumberUpdatedOnDay = dateAsText;
-
-            var todaysDayNumber = getOrdinalDate(timestamp_gregorian_short);
-
-            var dayOfWeek = timestamp_gregorian_short.day_of_week - 1;
-            if(dayOfWeek == 0){
-                dayOfWeek = 7;
-            }
-            weekNumber = (todaysDayNumber - dayOfWeek + 10) / 7;
-
-            // Handle end/beginning of year special cases:
-            if(weekNumber < 1){
-                // We are in the last week of the previous year
-                weekNumber = numberOfWeeksInYear(timestamp_gregorian_short.year -1);
-            }
-            else if(weekNumber == 53){
-                // We might be in the first week of the next year, have to check:
-                if (numberOfWeeksInYear(timestamp_gregorian_short.year != 53)) {
-                    weekNumber = 1;
-                }
-            }
+            weekNumber = calculateIsoWeek(timestamp_gregorian_short);
         }
         return weekNumber;
+    }
+
+    // Returns the ISO week for a given point in time.
+    function calculateIsoWeek(timestamp_gregorian_short){
+        var todaysDayNumber = getOrdinalDate(timestamp_gregorian_short);
+
+        var dayOfWeek = timestamp_gregorian_short.day_of_week - 1;
+        if(dayOfWeek == 0){
+            dayOfWeek = 7;
+        }
+        var calculatedWeekNumber = (todaysDayNumber - dayOfWeek + 10) / 7;
+
+        // Handle end/beginning of year special cases:
+        if(calculatedWeekNumber < 1){
+            // We are in the last week of the previous year
+            calculatedWeekNumber = numberOfWeeksInYear(timestamp_gregorian_short.year -1);
+        }
+        else if(calculatedWeekNumber == 53){
+            // We might be in the first week of the next year, have to check:
+            if (numberOfWeeksInYear(timestamp_gregorian_short.year != 53)) {
+                calculatedWeekNumber = 1;
+            }
+        }
+        return calculatedWeekNumber;
     }
 
     function getOrdinalDate (timestamp_gregorian_short) {
