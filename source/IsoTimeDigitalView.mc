@@ -138,6 +138,9 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
     var weekNumberUpdatedOnDay = "";
     function getIsoWeek (timestamp_gregorian_short, dateAsText) {
         if(weekNumberUpdatedOnDay != dateAsText){ // Only check for week number changes once per day
+            // Should maybe drop this clause and just calculate it once per day.
+            // Removes potential for bugs when the watch was of on monday and one has to wait
+            // and entire week for the recalculate.
             if(weekNumberUpdatedOnDay != "" && timestamp_gregorian_short.day_of_week != 2){
                 // No need to updae if we have obtained a value and today is not a monday (week number only changes on mondays)
                 return weekNumber;
