@@ -26,7 +26,9 @@
         <iq:languages>
             <iq:language>dan</iq:language>
             <iq:language>eng</iq:language>
+            <iq:language>fre</iq:language>
             <iq:language>nob</iq:language>
+            <iq:language>spa</iq:language>
             <iq:language>swe</iq:language>
         </iq:languages>
         <iq:barrels/>
