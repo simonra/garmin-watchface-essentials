@@ -1,0 +1,11 @@
+<strings>
+    <string id="AppName">Essentials</string>
+    <string id="week">Vi</string>
+    <string id="monday">Maanantai</string>
+    <string id="tuesday">Tiistai</string>
+    <string id="wednesday">Keskiviikko</string>
+    <string id="thursday">Torstai</string>
+    <string id="friday">Perjantai</string>
+    <string id="saturday">Lauantai</string>
+    <string id="sunday">Sunnuntai</string>
+</strings>
