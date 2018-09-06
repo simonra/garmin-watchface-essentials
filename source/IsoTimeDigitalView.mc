@@ -74,7 +74,8 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
 
         //WeekLabel
         var calculatedWeekNumber = getIsoWeek(now, dateText);
-        var weekNumberText = "Wk" + calculatedWeekNumber.format("%02d");
+        var weekAbbreviated = WatchUi.loadResource(Rez.Strings.week);
+        var weekNumberText = weekAbbreviated + calculatedWeekNumber.format("%02d");
         var weekView = View.findDrawableById("WeekLabel");
         weekView.setText(weekNumberText);
 
@@ -108,28 +109,28 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
     function getDayOfWeekLong(gregorianTime){
         switch (gregorianTime.day_of_week) {
             case 2:
-                return "Monday";
+                return WatchUi.loadResource(Rez.Strings.monday);
                 break;
             case 3:
-                return "Tuesday";
+                return WatchUi.loadResource(Rez.Strings.tuesday);
                 break;
             case 4:
-                return "Wednesday";
+                return WatchUi.loadResource(Rez.Strings.wednesday);
                 break;
             case 5:
-                return "Thursday";
+                return WatchUi.loadResource(Rez.Strings.thursday);
                 break;
             case 6:
-                return "Friday";
+                return WatchUi.loadResource(Rez.Strings.friday);
                 break;
             case 7:
-                return "Saturday";
+                return WatchUi.loadResource(Rez.Strings.saturday);
                 break;
             case 1:
-                return "Sunday";
+                return WatchUi.loadResource(Rez.Strings.sunday);
                 break;
             default:
-                return "NotADay";
+                return "NoDayFound";
                 break;
         }
     }
