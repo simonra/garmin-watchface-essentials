@@ -24,6 +24,7 @@
         </iq:products>
         <iq:permissions/>
         <iq:languages>
+            <iq:language>dan</iq:language>
             <iq:language>eng</iq:language>
             <iq:language>nob</iq:language>
         </iq:languages>
