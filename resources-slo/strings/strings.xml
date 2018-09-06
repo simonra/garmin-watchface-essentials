@@ -1,0 +1,11 @@
+<strings>
+    <string id="AppName">Essentials</string>
+    <string id="week">Tý</string>
+    <string id="monday">Pondelok</string>
+    <string id="tuesday">Utorok</string>
+    <string id="wednesday">Streda</string>
+    <string id="thursday">Štvrtok</string>
+    <string id="friday">Piatok</string>
+    <string id="saturday">Sobota</string>
+    <string id="sunday">Nedeľa</string>
+</strings>
