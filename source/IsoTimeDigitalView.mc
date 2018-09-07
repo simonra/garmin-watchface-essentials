@@ -80,6 +80,9 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
                 hour = 12;
             }
         }
+        else {
+            hour = hour.format("%02d");
+        }
         var timeString = Lang.format(
             "$1$:$2$",
             [
