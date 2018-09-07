@@ -1,0 +1,11 @@
+<strings>
+    <string id="AppName">Essentials</string>
+    <string id="week">Ty</string>
+    <string id="monday">Poniedziałek</string>
+    <string id="tuesday">Wtorek</string>
+    <string id="wednesday">Środa</string>
+    <string id="thursday">Czwartek</string>
+    <string id="friday">Piątek</string>
+    <string id="saturday">Sobota</string>
+    <string id="sunday">Niedziela</string>
+</strings>
