@@ -11,6 +11,15 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
     function initialize() {
         WatchFace.initialize();
         not24Hour = !System.getDeviceSettings().is24Hour;
+        // Load strings
+        weekAbbreviated = WatchUi.loadResource(Rez.Strings.week);
+        monday = WatchUi.loadResource(Rez.Strings.monday);
+        tuesday = WatchUi.loadResource(Rez.Strings.tuesday);
+        wednesday = WatchUi.loadResource(Rez.Strings.wednesday);
+        thursday = WatchUi.loadResource(Rez.Strings.thursday);
+        friday = WatchUi.loadResource(Rez.Strings.friday);
+        saturday = WatchUi.loadResource(Rez.Strings.saturday);
+        sunday = WatchUi.loadResource(Rez.Strings.sunday);
 //        Storage.setValue("weekNumber", weekNumber);
 //        Storage.setValue("weekNumberUpdatedOnDay", weekNumberUpdatedOnDay);
     }
@@ -25,8 +34,17 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
     // loading resources into memory.
     function onShow() {
         not24Hour = !System.getDeviceSettings().is24Hour;
+        // Load strings
         weekNumber = Storage.getValue("weekNumber");
         weekNumberUpdatedOnDay = Storage.getValue("weekNumberUpdatedOnDay");
+        weekAbbreviated = WatchUi.loadResource(Rez.Strings.week);
+        monday = WatchUi.loadResource(Rez.Strings.monday);
+        tuesday = WatchUi.loadResource(Rez.Strings.tuesday);
+        wednesday = WatchUi.loadResource(Rez.Strings.wednesday);
+        thursday = WatchUi.loadResource(Rez.Strings.thursday);
+        friday = WatchUi.loadResource(Rez.Strings.friday);
+        saturday = WatchUi.loadResource(Rez.Strings.saturday);
+        sunday = WatchUi.loadResource(Rez.Strings.sunday);
     }
 
     // Called when this View is removed from the screen. Save the
@@ -37,7 +55,19 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
         Storage.setValue("weekNumberUpdatedOnDay", weekNumberUpdatedOnDay);
     }
 
+    // String settings
+    // Load them to variables in memory rather than scrape them of the disk all the time.
+    var weekAbbreviated = "Wk";
+    var monday = "Monday";
+    var tuesday = "Tuesday";
+    var wednesday = "Wednesday";
+    var thursday = "Thursday";
+    var friday = "Friday";
+    var saturday = "Saturday";
+    var sunday = "Sunday";
+    // Other settings
     var not24Hour = false;
+
     // Update the view
     function onUpdate(dc) {
         var now = Gregorian.info(Time.now(), Time.FORMAT_SHORT);
@@ -74,7 +104,6 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
 
         //WeekLabel
         var calculatedWeekNumber = getIsoWeek(now, dateText);
-        var weekAbbreviated = WatchUi.loadResource(Rez.Strings.week);
         var weekNumberText = weekAbbreviated + calculatedWeekNumber.format("%02d");
         var weekView = View.findDrawableById("WeekLabel");
         weekView.setText(weekNumberText);
@@ -109,25 +138,25 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
     function getDayOfWeekLong(gregorianTime){
         switch (gregorianTime.day_of_week) {
             case 2:
-                return WatchUi.loadResource(Rez.Strings.monday);
+                return monday;
                 break;
             case 3:
-                return WatchUi.loadResource(Rez.Strings.tuesday);
+                return tuesday;
                 break;
             case 4:
-                return WatchUi.loadResource(Rez.Strings.wednesday);
+                return wednesday;
                 break;
             case 5:
-                return WatchUi.loadResource(Rez.Strings.thursday);
+                return thursday;
                 break;
             case 6:
-                return WatchUi.loadResource(Rez.Strings.friday);
+                return friday;
                 break;
             case 7:
-                return WatchUi.loadResource(Rez.Strings.saturday);
+                return saturday;
                 break;
             case 1:
-                return WatchUi.loadResource(Rez.Strings.sunday);
+                return sunday;
                 break;
             default:
                 return "NoDayFound";
