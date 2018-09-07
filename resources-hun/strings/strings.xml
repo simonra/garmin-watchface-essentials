@@ -1,0 +1,11 @@
+<strings>
+    <string id="AppName">Essentials</string>
+    <string id="week">Hé</string>
+    <string id="monday">Hétfő</string>
+    <string id="tuesday">Kedd</string>
+    <string id="wednesday">Szerda</string>
+    <string id="thursday">Csütörtök</string>
+    <string id="friday">Péntek</string>
+    <string id="saturday">Szombat</string>
+    <string id="sunday">Vasárnap</string>
+</strings>
