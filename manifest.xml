@@ -33,6 +33,7 @@
             <iq:language>fre</iq:language>
             <iq:language>hrv</iq:language>
             <iq:language>hun</iq:language>
+            <iq:language>ind</iq:language>
             <iq:language>ita</iq:language>
             <iq:language>nob</iq:language>
             <iq:language>pol</iq:language>
@@ -41,6 +42,7 @@
             <iq:language>slv</iq:language>
             <iq:language>spa</iq:language>
             <iq:language>swe</iq:language>
+            <iq:language>zsm</iq:language>
         </iq:languages>
         <iq:barrels/>
     </iq:application>
