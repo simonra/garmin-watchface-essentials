@@ -20,8 +20,6 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
         friday = WatchUi.loadResource(Rez.Strings.friday);
         saturday = WatchUi.loadResource(Rez.Strings.saturday);
         sunday = WatchUi.loadResource(Rez.Strings.sunday);
-
-        dateUtil = new DateUtilsIso();
 //        Storage.setValue("weekNumber", weekNumber);
 //        Storage.setValue("weekNumberUpdatedOnDay", weekNumberUpdatedOnDay);
     }
@@ -47,8 +45,6 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
         friday = WatchUi.loadResource(Rez.Strings.friday);
         saturday = WatchUi.loadResource(Rez.Strings.saturday);
         sunday = WatchUi.loadResource(Rez.Strings.sunday);
-
-        dateUtil = new DateUtilsIso();
     }
 
     // Called when this View is removed from the screen. Save the
@@ -57,10 +53,8 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
     function onHide() {
         Storage.setValue("weekNumber", weekNumber);
         Storage.setValue("weekNumberUpdatedOnDay", weekNumberUpdatedOnDay);
-        dateUtil = null;
     }
 
-    var dateUtil = null;
     // String settings
     // Load them to variables in memory rather than scrape them of the disk all the time.
     var weekAbbreviated = "Wk";
@@ -178,8 +172,11 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
     function getIsoWeek (timestamp_gregorian_short, dateAsText) {
         // Only check for week number changes once per day
         if(weekNumberUpdatedOnDay != dateAsText){
-            weekNumberUpdatedOnDay = dateAsText;
+            var dateUtil = new DateUtilsIso();
             weekNumber = dateUtil.calculateWeekNumber(timestamp_gregorian_short);
+            dateUtil = null;
+
+            weekNumberUpdatedOnDay = dateAsText;
         }
         return weekNumber;
     }
