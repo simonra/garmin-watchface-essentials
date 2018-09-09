@@ -1,5 +1,6 @@
 using Toybox.Time;
 using Toybox.Time.Gregorian;
+using Toybox.Math;
 
 class DateUtilsIso {
     // Returns the ISO week for a given point in time.
@@ -10,9 +11,8 @@ class DateUtilsIso {
         if(dayOfWeek == 0){
             dayOfWeek = 7;
         }
-        // Note that the result of this division should be floored.
-        // The reason it is not is because integer division in monkey c discards any remainder, effectively yielding the same result.
-        var calculatedWeekNumber = (todaysDayNumber - dayOfWeek + 10) / 7;
+
+        var calculatedWeekNumber = Math.floor((todaysDayNumber - dayOfWeek + 10) / 7);
 
         // Handle end/beginning of year special cases:
         if(calculatedWeekNumber < 1){
@@ -28,6 +28,8 @@ class DateUtilsIso {
         return calculatedWeekNumber;
     }
 
+    // Obtain the position of a given day in a year. For instance the 1st of January
+    // would be be first day of the year (1), and the second of february would be day 33.
     function getOrdinalDate (timestamp_gregorian_short) {
         var calculatedOrdinalValue = timestamp_gregorian_short.day;
         switch (timestamp_gregorian_short.month) {
@@ -94,10 +96,8 @@ class DateUtilsIso {
         }
         return 52;
     }
-    function p(year) {
-        // Note: This relies on monkey c's integer division discarding any remainder.
-        // All the divisions have to be floored.
-        return (year + year/4 - year/100 + year/400) % 7;
+    hidden function p(year) {
+        return (year + Math.floor(year/4) - Math.floor(year/100) + Math.floor(year/400)) % 7;
     }
 
     function isLeapYear (year) {
