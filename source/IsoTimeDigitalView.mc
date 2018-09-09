@@ -171,7 +171,7 @@ class IsoTimeDigitalView extends WatchUi.WatchFace {
     var weekNumberUpdatedOnDay = "";
     function getIsoWeek (timestamp_gregorian_short, dateAsText) {
         // Only check for week number changes once per day
-        if(weekNumberUpdatedOnDay != dateAsText){
+        if(!dateAsText.equals(weekNumberUpdatedOnDay)){
             var dateUtil = new DateUtilsIso();
             weekNumber = dateUtil.calculateWeekNumber(timestamp_gregorian_short);
             dateUtil = null;
