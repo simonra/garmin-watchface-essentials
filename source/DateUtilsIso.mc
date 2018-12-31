@@ -21,7 +21,7 @@ class DateUtilsIso {
         }
         else if(calculatedWeekNumber == 53){
             // We might be in the first week of the next year, have to check:
-            if (numberOfWeeksInYear(timestamp_gregorian_short.year != 53)) {
+            if (numberOfWeeksInYear(timestamp_gregorian_short.year) != 53) {
                 calculatedWeekNumber = 1;
             }
         }
